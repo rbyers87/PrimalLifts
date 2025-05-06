@@ -128,7 +128,7 @@ export default function Navbar() {
             
             {/* App Title or Logo in center */}
             <div className="text-lg font-semibold text-gray-800 dark:text-white">
-              FitTrack
+              Primal Lifts
             </div>
             
 
