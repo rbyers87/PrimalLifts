@@ -65,13 +65,7 @@ export default function Navbar() {
             Primal Lifts
           </div>
 
-          {/* Profile Link */}
-          <Link
-            to="/profile"
-            className={`p-2 ${isActive('/profile') ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-600 dark:text-gray-300'}`}
-          >
-            <User className="h-6 w-6" />
-          </Link>
+
         </div>
 
         {/* Always-visible menu */}
