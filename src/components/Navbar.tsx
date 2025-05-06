@@ -51,22 +51,21 @@ export default function Navbar() {
   return (
     <nav className="bg-transparent shadow-lg dark:bg-transparent">
       <div className="container mx-auto px-4 bg-transparent">
-        <div className="flex justify-between items-center h-16">
-          {/* Hamburger Menu Toggle */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
+      <div className="flex justify-between items-center h-16 relative">
+          {/* Hamburger menu button on the left */}
+      <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-md dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-          >
-            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+      >
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
 
-          {/* App Title */}
-          <div className="text-lg font-semibold text-gray-800 dark:text-white">
-            Primal Lifts
-          </div>
+  {/* Centered App Title */}
+  <div className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800 dark:text-white">
+    Primal Lifts
+  </div>
+</div>
 
-
-        </div>
 
         {/* Always-visible menu */}
         {menuOpen && (
