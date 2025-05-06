@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { 
@@ -10,40 +10,16 @@ import {
   NotebookPen, 
   Home, 
   MessageSquare,
-  Menu,
-  X
+  MoreHorizontal
 } from 'lucide-react';
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   
   // Check if current route is active
   const isActive = (path) => location.pathname === path;
-  
-  // Handle window resize for responsive design
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Initial check
-    checkIfMobile();
-    
-    // Add event listener
-    window.addEventListener('resize', checkIfMobile);
-    
-    // Clean up
-    return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
-  
-  // Close mobile menu when navigating
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
   
   if (!user) return null;
   
@@ -74,135 +50,115 @@ export default function Navbar() {
 
   // Main navigation links
   const navLinks = [
+    { path: "/", icon: <Home className={getIconClasses("/")} />, label: "Home" },
     { path: "/wod", icon: <Dumbbell className={getIconClasses("/wod")} />, label: "WOD" },
     { path: "/workouts", icon: <NotebookPen className={getIconClasses("/workouts")} />, label: "Workouts" },
     { path: "/leaderboard", icon: <Trophy className={getIconClasses("/leaderboard")} />, label: "Leaderboard" },
     { path: "/messageboard", icon: <MessageSquare className={getIconClasses("/messageboard")} />, label: "Messages" }
   ];
   
+  // Account navigation links
+  const accountLinks = [
+    { path: "/profile", icon: <User className={getIconClasses("/profile")} />, label: "Profile" },
+    { path: "/settings", icon: <Settings className={getIconClasses("/settings")} />, label: "Settings" }
+  ];
+  
   return (
-    <nav className="bg-transparent shadow-lg dark:bg-transparent">
-      <div className="container mx-auto px-4 bg-transparent">
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex justify-center items-center h-16 relative">
-          {/* Home icon on the left */}
-          <Link 
-            to="/" 
-            className={`absolute left-0 flex items-center ${isActive("/") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"}`}
-          >
-            <Home className="h-6 w-6" />
-          </Link>
-          
-          {/* Main navigation links - centered */}
-          <div className="flex items-center space-x-8 mx-auto">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={getNavLinkClasses(link.path)}
-              >
-                {link.icon}
-                <span className="text-xs mt-1">{link.label}</span>
-              </Link>
-            ))}
-          </div>
-          
-          {/* User controls on the right */}
-          <div className="absolute right-0 flex items-center space-x-4">
-            <Link
-              to="/profile"
-              className={`${isActive("/profile") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"} px-3 py-2 rounded-md text-sm font-medium`}
-            >
-              <User className="h-5 w-5" />
-            </Link>
-            
-            <Link
-              to="/settings"
-              className={`${isActive("/settings") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"} px-3 py-2 rounded-md text-sm font-medium`}
-            >
-              <Settings className="h-5 w-5" />
-            </Link>
-            
-            <button
-              onClick={handleSignOut}
-              className="dark:text-gray-300 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium dark:hover:text-indigo-400"
-            >
-              <LogOut className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-        
-        {/* Mobile Navigation */}
-        <div className="md:hidden">
-          <div className="flex justify-between items-center h-16">
+    <>
+      {/* Desktop Navigation */}
+      <nav className="hidden md:block bg-transparent shadow-lg dark:bg-transparent">
+        <div className="container mx-auto px-4 bg-transparent">
+          <div className="flex justify-center items-center h-16 relative">
             {/* Home icon on the left */}
             <Link 
               to="/" 
-              className={`flex items-center ${isActive("/") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300"}`}
+              className={`absolute left-0 flex items-center ${isActive("/") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"}`}
             >
               <Home className="h-6 w-6" />
             </Link>
             
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-          
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-              {navLinks.map((link) => (
+            {/* Main navigation links - centered (excluding Home which is on the left) */}
+            <div className="flex items-center space-x-8 mx-auto">
+              {navLinks.slice(1).map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`${isActive(link.path) ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300"} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-700`}
+                  className={getNavLinkClasses(link.path)}
                 >
-                  <div className="flex items-center">
-                    {link.icon}
-                    <span className="ml-3">{link.label}</span>
-                  </div>
+                  {link.icon}
+                  <span className="text-xs mt-1">{link.label}</span>
+                </Link>
+              ))}
+            </div>
+            
+            {/* User controls on the right */}
+            <div className="absolute right-0 flex items-center space-x-4">
+              {accountLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`${isActive(link.path) ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"} px-3 py-2 rounded-md text-sm font-medium`}
+                >
+                  {link.icon}
                 </Link>
               ))}
               
-              <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-              
-              <Link
-                to="/profile"
-                className={`${isActive("/profile") ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300"} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-700`}
-              >
-                <div className="flex items-center">
-                  <User className="h-5 w-5" />
-                  <span className="ml-3">Profile</span>
-                </div>
-              </Link>
-              
-              <Link
-                to="/settings"
-                className={`${isActive("/settings") ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300"} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-700`}
-              >
-                <div className="flex items-center">
-                  <Settings className="h-5 w-5" />
-                  <span className="ml-3">Settings</span>
-                </div>
-              </Link>
-              
               <button
                 onClick={handleSignOut}
-                className="w-full text-left dark:text-gray-300 block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="dark:text-gray-300 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium dark:hover:text-indigo-400"
               >
-                <div className="flex items-center">
-                  <LogOut className="h-5 w-5" />
-                  <span className="ml-3">Sign Out</span>
-                </div>
+                <LogOut className="h-5 w-5" />
               </button>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+        
+      {/* Mobile Navigation - Simple Bottom Tab Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg z-10">
+        <div className="grid grid-cols-5 h-16">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`flex flex-col items-center justify-center ${
+                isActive(link.path) 
+                  ? "text-indigo-600 dark:text-indigo-400" 
+                  : "text-gray-500 dark:text-gray-400"
+              }`}
+            >
+              {React.cloneElement(link.icon, { 
+                className: isActive(link.path) 
+                  ? "h-6 w-6 text-indigo-600 dark:text-indigo-400" 
+                  : "h-6 w-6 text-gray-500 dark:text-gray-400" 
+              })}
+              <span className="text-xs mt-1">{link.label}</span>
+            </Link>
+          ))}
+          
+          {/* More menu */}
+          <div className="relative group">
+            <Link
+              to="/profile"
+              className={`flex flex-col items-center justify-center ${
+                isActive("/profile") || isActive("/settings") 
+                  ? "text-indigo-600 dark:text-indigo-400" 
+                  : "text-gray-500 dark:text-gray-400"
+              }`}
+            >
+              <User className={`h-6 w-6 ${
+                isActive("/profile") 
+                  ? "text-indigo-600 dark:text-indigo-400" 
+                  : "text-gray-500 dark:text-gray-400"
+              }`} />
+              <span className="text-xs mt-1">Profile</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+      
+      {/* Add padding to the bottom of the page on mobile to prevent content from being hidden behind the navbar */}
+      <div className="md:hidden h-16"></div>
+    </>
   );
 }
