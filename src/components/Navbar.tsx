@@ -57,6 +57,7 @@ export default function Navbar() {
     { path: "/workouts", icon: <NotebookPen className={getIconClasses("/workouts")} />, label: "Workouts" },
     { path: "/leaderboard", icon: <Trophy className={getIconClasses("/leaderboard")} />, label: "Leaderboard" },
     { path: "/messageboard", icon: <MessageSquare className={getIconClasses("/messageboard")} />, label: "Messages" }
+    { path: "/profile", icon: <User className={getIconClasses("/profile")} />, label: "Profile" }
   ];
   
   // Main navigation links (excluding home for desktop view)
