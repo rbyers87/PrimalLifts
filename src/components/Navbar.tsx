@@ -64,7 +64,6 @@ export default function Navbar() {
           <div className="text-lg font-semibold text-gray-800 dark:text-white">
             Primal Lifts
           </div>
-
         </div>
 
         {/* Always-visible menu */}
