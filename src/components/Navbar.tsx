@@ -131,6 +131,7 @@ export default function Navbar() {
               FitTrack
             </div>
             
+/*
             {/* User profile on the right */}
             <Link
               to="/profile"
@@ -139,6 +140,8 @@ export default function Navbar() {
               <User className="h-6 w-6" />
             </Link>
           </div>
+
+*/
           
           {/* Mobile menu dropdown */}
           {mobileMenuOpen && (
