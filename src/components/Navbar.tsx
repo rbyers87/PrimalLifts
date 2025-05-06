@@ -91,7 +91,7 @@ export default function Navbar() {
           </div>
           
       // mobile    {/* User controls on the right */}
-    //      <div className="absolute right-0 flex items-center space-x-4">
+          <div className="absolute right-0 flex items-center space-x-4">
     //        <Link
     //          to="/profile"
     //          className={`${isActive("/profile") ? "text-indigo-600 dark:text-indigo-400" : "dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"} px-3 py-2 rounded-md text-sm font-medium`}
