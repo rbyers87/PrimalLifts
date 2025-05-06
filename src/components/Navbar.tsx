@@ -51,8 +51,9 @@ export default function Navbar() {
   return (
     <nav className="bg-transparent shadow-lg dark:bg-transparent">
       <div className="container mx-auto px-4 bg-transparent">
-        <div className="flex justify-between items-center h-16">
-          {/* Hamburger Menu Toggle */}
+        {/* Top nav bar */}
+        <div className="flex items-center justify-between h-16 relative">
+          {/* Left: Hamburger button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-2 rounded-md dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
@@ -60,13 +61,16 @@ export default function Navbar() {
             {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
 
-          {/* App Title */}
-          <div className="text-lg font-semibold text-gray-800 dark:text-white">
+          {/* Center: App title */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800 dark:text-white">
             Primal Lifts
           </div>
+
+          {/* Right: Empty div to balance layout */}
+          <div className="w-6 h-6" />
         </div>
 
-        {/* Always-visible menu */}
+        {/* Mobile Menu */}
         {menuOpen && (
           <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             {allNavLinks.map((link) => (
