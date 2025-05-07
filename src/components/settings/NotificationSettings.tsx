@@ -1,98 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import { Bell, Calendar, Trophy } from 'lucide-react';
-
-declare global {
-  interface Window {
-    OneSignal: any;
-  }
-}
+import React, { useState } from 'react';
+import { Bell, Calendar, Trophy, MessageSquare } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function NotificationSettings() {
+  const { user } = useAuth();
   const [settings, setSettings] = useState({
-    workout_reminders: false,
-    achievement_notifications: false,
+    workout_reminders: true,
+    achievement_notifications: true,
     leaderboard_updates: false,
+    message_board_notifications: false, // New setting for message board notifications
   });
 
-  useEffect(() => {
-    // Load existing OneSignal tags (user preferences)
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    window.OneSignalDeferred.push(async function (OneSignal: any) {
-      const tags = await OneSignal.getTags();
-      setSettings({
-        workout_reminders: tags.workout_reminders === 'true',
-        achievement_notifications: tags.achievement_notifications === 'true',
-        leaderboard_updates: tags.leaderboard_updates === 'true',
-      });
-    });
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleChange = (setting: keyof typeof settings) => {
-    const newValue = !settings[setting];
-    setSettings((prev) => ({
+  React.useEffect(() => {
+    async function fetchSettings() {
+      if (!user) return;
+
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('user_preferences')
+          .select('notification_settings')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error) throw error;
+
+        if (data?.notification_settings) {
+          setSettings(JSON.parse(data.notification_settings));
+        }
+      } catch (error) {
+        console.error('Error fetching notification settings:', error);
+        setMessage('Error fetching settings');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSettings();
+  }, [user]);
+
+  const handleChange = async (setting: keyof typeof settings) => {
+    setSettings(prev => ({
       ...prev,
-      [setting]: newValue,
+      [setting]: !prev[setting]
     }));
 
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    window.OneSignalDeferred.push(async function (OneSignal: any) {
-      // Prompt for permission if not granted
-      const permission = await OneSignal.Notification.permission;
-      if (permission !== 'granted') {
-        await OneSignal.showSlidedownPrompt();
-      }
+    setLoading(true);
+    setMessage('');
 
-      // Set a tag like { "workout_reminders": "true" } or "false"
-      await OneSignal.sendTag(setting, newValue.toString());
-    });
+    try {
+      const { error } = await supabase
+        .from('user_preferences')
+        .upsert(
+          {
+            user_id: user.id,
+            notification_settings: JSON.stringify({
+              ...settings,
+              [setting]: !settings[setting]
+            })
+          },
+          { onConflict: 'user_id' }
+        );
+
+      if (error) throw error;
+      setMessage('Settings updated successfully');
+    } catch (error) {
+      console.error('Error updating notification settings:', error);
+      setMessage('Error updating settings');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const renderToggle = (settingKey: keyof typeof settings, icon: JSX.Element, title: string, desc: string) => (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        {icon}
-        <div>
-          <p className="font-medium dark:text-gray-100">{title}</p>
-          <p className="text-sm text-gray-500">{desc}</p>
-        </div>
-      </div>
-      <button
-        onClick={() => handleChange(settingKey)}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-          settings[settingKey] ? 'bg-indigo-600' : 'bg-gray-200'
-        }`}
-      >
-        <span
-          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-            settings[settingKey] ? 'translate-x-5' : 'translate-x-0'
-          }`}
-        />
-      </button>
-    </div>
-  );
-
   return (
-    <div className="bg-white dark:bg-darkBackground dark:text-gray-100 rounded-lg shadow-md p-6 transition-all duration-300">
+    <div className="bg-white dark:bg-darkBackground dark:text-gray-100 dark:text-gray-200 rounded-lg shadow-md p-6 transition-all duration-300">
       <h2 className="text-xl font-bold dark:text-gray-100 mb-4">Notification Settings</h2>
+
+      {message && (
+        <p className={`mt-4 text-sm ${message.includes('Error') ? 'text-red-600' : 'text-green-600'}`}>
+          {message}
+        </p>
+      )}
+
       <div className="space-y-4">
-        {renderToggle(
-          'workout_reminders',
-          <Bell className="h-5 w-5 text-indigo-600" />,
-          'Workout Reminders',
-          'Get notified about your scheduled workouts'
-        )}
-        {renderToggle(
-          'achievement_notifications',
-          <Trophy className="h-5 w-5 text-indigo-600" />,
-          'Achievement Notifications',
-          'Get notified when you reach new milestones'
-        )}
-        {renderToggle(
-          'leaderboard_updates',
-          <Calendar className="h-5 w-5 text-indigo-600" />,
-          'Leaderboard Updates',
-          'Get notified about leaderboard changes'
-        )}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Bell className="h-5 w-5 text-indigo-600" />
+            <div>
+              <p className="font-medium dark:text-gray-100">Workout Reminders</p>
+              <p className="text-sm text-gray-500">Get notified about your scheduled workouts</p>
+            </div>
+          </div>
+          <button
+            onClick={() => handleChange('workout_reminders')}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              settings.workout_reminders ? 'bg-indigo-600' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                settings.workout_reminders ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Trophy className="h-5 w-5 text-indigo-600" />
+            <div>
+              <p className="font-medium dark:text-gray-100">Achievement Notifications</p>
+              <p className="text-sm text-gray-500">Get notified when you reach new milestones</p>
+            </div>
+          </div>
+          <button
+            onClick={() => handleChange('achievement_notifications')}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              settings.achievement_notifications ? 'bg-indigo-600' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                settings.achievement_notifications ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Calendar className="h-5 w-5 text-indigo-600" />
+            <div>
+              <p className="font-medium dark:text-gray-100">Leaderboard Updates</p>
+              <p className="text-sm text-gray-500">Get notified about leaderboard changes</p>
+            </div>
+          </div>
+          <button
+            onClick={() => handleChange('leaderboard_updates')}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              settings.leaderboard_updates ? 'bg-indigo-600' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                settings.leaderboard_updates ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+        
+        {/* New Message Board Notifications Toggle */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <MessageSquare className="h-5 w-5 text-indigo-600" />
+            <div>
+              <p className="font-medium dark:text-gray-100">Message Board Notifications</p>
+              <p className="text-sm text-gray-500">Get notified when new messages are posted</p>
+            </div>
+          </div>
+          <button
+            onClick={() => handleChange('message_board_notifications')}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              settings.message_board_notifications ? 'bg-indigo-600' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                settings.message_board_notifications ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
