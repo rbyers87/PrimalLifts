@@ -9,13 +9,23 @@
     <link rel="stylesheet" href="index.css">
 
    <!-- OneSignal Notifications -->
-   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
+   <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "50c1b3ba-6ce1-4ba9-b003-cb9e006c2be6",
     });
+
+    // Wait until SDK is ready and user is subscribed
+    const isSubscribed = await OneSignal.isPushNotificationsEnabled();
+    console.log("Is user subscribed?", isSubscribed);
+
+    if (isSubscribed) {
+      const tags = await OneSignal.getTags();
+      console.log("User tags:", tags);
+    } else {
+      console.log("User is not subscribed to push notifications.");
+    }
   });
 </script>
     
