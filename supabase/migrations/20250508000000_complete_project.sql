@@ -332,3 +332,8 @@ CREATE POLICY "Anyone can delete their own avatar."
 ON storage.objects FOR DELETE
 TO PUBLIC
 USING (bucket_id = 'primalphotos' AND auth.uid() = owner);
+
+-- This snippet adds the notification_settings column to the user_preferences table.
+
+ALTER TABLE public.user_preferences
+ADD COLUMN notification_settings text;
