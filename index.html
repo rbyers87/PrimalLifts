@@ -14,6 +14,7 @@
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "50c1b3ba-6ce1-4ba9-b003-cb9e006c2be6",
+serviceWorkerPath: "OneSignalSDKWorker.js",
     });
 
     // Wait until SDK is ready and user is subscribed
