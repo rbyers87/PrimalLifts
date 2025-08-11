@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
   ],
+     base: "/PrimalLifts",
     
   resolve: {
     alias: {
@@ -37,5 +38,5 @@ export default defineConfig({
       },
     },
   },
-   base: "/PrimalLifts",
+
 });
