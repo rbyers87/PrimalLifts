@@ -6,6 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     react(),
+    // PWA configuration
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
@@ -38,6 +39,7 @@ export default defineConfig({
       }
     })
   ],
+    
   resolve: {
     alias: {
       '@lib': path.resolve(__dirname, 'src/lib'),
@@ -67,4 +69,5 @@ export default defineConfig({
       },
     },
   },
+   base: "/PrimalLifts",
 });
