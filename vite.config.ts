@@ -6,7 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     react(),
-          base: "/PrimalLifts/",
+
     // PWA configuration
     VitePWA({
       registerType: 'autoUpdate',
@@ -48,7 +48,7 @@ export default defineConfig({
     },
     conditions: ['import', 'module', 'browser', 'default']
   },
-
+          base: "/PrimalLifts/",
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
