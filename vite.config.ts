@@ -11,7 +11,6 @@ export default defineConfig({
       injectRegister: 'auto',
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
-        // Add these options to fix the service worker generation
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
@@ -68,18 +67,16 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   build: {
-    // Add this to handle the service worker generation better
     sourcemap: process.env.NODE_ENV !== 'production',
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-router-dom': ['react-router-dom'],
-          'react': ['react', 'react-dom'],
-          // Add vendor chunk for better caching
-          'vendor': ['react', 'react-dom', 'react-router-dom']
+          // Simplified chunk configuration to avoid conflicts
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['react-router-dom'],
+          // Add other large dependencies here if needed
         },
       },
     },
   },
-  // Remove the server proxy as it's not needed for build
 });
