@@ -2,7 +2,7 @@
   "name": "Primal Lifts",
   "short_name": "PLifts",
   "description": "Track your workouts and fitness progress",
-  "start_url": "/",
+  "start_url": "/PrimalLifts/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
