@@ -6,13 +6,28 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     react(),
-
-    // PWA configuration
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}']
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
+        // Add these options to fix the service worker generation
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: {
+                maxEntries: 4,
+                maxAgeSeconds: 365 * 24 * 60 * 60 // 365 days
+              }
+            }
+          }
+        ]
       },
       manifest: {
         name: 'Primal Lifts',
@@ -53,23 +68,18 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   build: {
+    // Add this to handle the service worker generation better
+    sourcemap: process.env.NODE_ENV !== 'production',
     rollupOptions: {
       output: {
         manualChunks: {
           'react-router-dom': ['react-router-dom'],
           'react': ['react', 'react-dom'],
+          // Add vendor chunk for better caching
+          'vendor': ['react', 'react-dom', 'react-router-dom']
         },
       },
     },
   },
-  server: {
-    proxy: {
-      '/api/manifest': {
-        target: 'http://localhost:5173',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/manifest/, '/manifest.json'),
-      },
-    },
-  },
-
+  // Remove the server proxy as it's not needed for build
 });
