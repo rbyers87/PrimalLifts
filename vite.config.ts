@@ -48,7 +48,7 @@ export default defineConfig({
     },
     conditions: ['import', 'module', 'browser', 'default']
   },
-          base: "/PrimalLifts/",
+  base: "/PrimalLifts/",
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
