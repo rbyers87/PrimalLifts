@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Primal Lifts</title>
+    <link rel="manifest" href="/PrimalLifts/assets/manifest-LX-8I4VO.json">
+    <link rel="stylesheet" href="index.css">
+
+   <!-- OneSignal Notifications -->
+   <script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "50c1b3ba-6ce1-4ba9-b003-cb9e006c2be6",
+serviceWorkerPath: "OneSignalSDKWorker.js",
+    });
+
+    // Wait until SDK is ready and user is subscribed
+    const isSubscribed = await OneSignal.isPushNotificationsEnabled();
+    console.log("Is user subscribed?", isSubscribed);
+
+    if (isSubscribed) {
+      const tags = await OneSignal.getTags();
+      console.log("User tags:", tags);
+    } else {
+      console.log("User is not subscribed to push notifications.");
+    }
+  });
+</script>
+    
+  <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/PrimalLifts/assets/favicon-96x96-CDVFvtqZ.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/PrimalLifts/assets/favicon-WOWT9p29.svg" />
+    <link rel="shortcut icon" href="/PrimalLifts/assets/favicon-BLcneJ8v.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/PrimalLifts/assets/apple-touch-icon-DqKAq-JQ.png" />
+ 
+
+   
+    <!-- PWA Meta Tags -->
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <script type="module" crossorigin src="/PrimalLifts/assets/index-Bg-rp7Wk.js"></script>
+    <link rel="modulepreload" crossorigin href="/PrimalLifts/assets/react-vendor-DE-6VouJ.js">
+    <link rel="modulepreload" crossorigin href="/PrimalLifts/assets/router-vendor-BkIQWp5j.js">
+    <link rel="stylesheet" crossorigin href="/PrimalLifts/assets/index-B9qa_Zl6.css">
+  <link rel="manifest" href="/PrimalLifts/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/PrimalLifts/registerSW.js"></script></head>
+  <body class="bg-lightBackground text-lightText dark:bg-darkBackground dark:text-darkText">
+    <div id="root"></div>
+
+    
+    <!-- Load UserScripts -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+     /** @ts-ignore */
+    eruda.init();
+    </script>
+    
+  </body>
+</html>
