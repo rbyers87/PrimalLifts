@@ -119,6 +119,23 @@ self.addEventListener('fetch', (event) => {
 
 ✅ You’re serving both OneSignalSDKWorker.js and OneSignalSDKUpdaterWorker.js from root
 
+8/29/25 added github pages but was having problems getting it to deploy.  Deepseek gave me this suggestion that worked addign to package.json file:
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "npx gh-pages -d dist",
+    "first-deploy": "npm run build && git checkout --orphan gh-pages && git rm -rf . && git commit --allow-empty -m \"Initial gh-pages\" && git push origin gh-pages && git checkout main && npm run deploy"
+  }
+}
+
+after this, ran npm run first-deploy
+
+don't forget to run in terminal: git pull
+for latest changes before running npm run deploy
+
 ✅ You don’t manually handle push events anymore
 
 ✅ You’re using HTTPS
