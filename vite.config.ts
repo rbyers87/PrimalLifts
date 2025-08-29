@@ -14,6 +14,8 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
+        navigateFallback: '/index.html', // Add this for SPA routing
+        navigateFallbackAllowlist: [/^(?!\/__).*/], // Allow all routes except those starting with __
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
@@ -22,7 +24,7 @@ export default defineConfig({
               cacheName: 'google-fonts-webfonts',
               expiration: {
                 maxEntries: 4,
-                maxAgeSeconds: 365 * 24 * 60 * 60 // 365 days
+                maxAgeSeconds: 365 * 24 * 60 * 60
               }
             }
           }
@@ -35,7 +37,7 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/', // Make sure this is correct
         icons: [
           {
             src: '/icons/icon-192x192.png',
@@ -71,10 +73,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Simplified chunk configuration to avoid conflicts
           'react-vendor': ['react', 'react-dom'],
           'router-vendor': ['react-router-dom'],
-          // Add other large dependencies here if needed
         },
       },
     },
