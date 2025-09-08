@@ -109,6 +109,12 @@ export default function Dashboard() {
     setIsEditing(false);
   };
 
+  const handleWorkoutLoggerClose = () => {
+    setIsLogging(false);
+    // Force refresh of weekly exercises when workout logger closes
+    setRefreshKey(prev => prev + 1);
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '';
     try {
@@ -180,13 +186,14 @@ export default function Dashboard() {
           <RecentWorkouts key={refreshKey} onWorkoutComplete={handleWorkoutComplete} />
         </div>
         <div className="space-y-4">
-          <WeeklyExercises completedExercises={completedExercises} />
+          {/* Add key prop to force re-mount when refreshKey changes */}
+          <WeeklyExercises key={refreshKey} completedExercises={completedExercises} />
         </div>
       </div>
       {isLogging && (
         <WorkoutLogger
           workout={wodWorkout}
-          onClose={() => setIsLogging(false)}
+          onClose={handleWorkoutLoggerClose}
           previousLogs={previousLogs}
         />
       )}
