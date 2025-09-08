@@ -39,13 +39,18 @@ export function WeeklyExercises({ completedExercises: initialCompletedExercises 
         setExercises(exercisesData || []);
 
         if (user) {
-          // Get normalized date strings for comparison
-          const weekStart = format(currentWeekStart, 'yyyy-MM-dd');
-          const weekEnd = format(endOfWeek(currentWeekStart, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+          // Create consistent week boundaries
+          const weekStart = setHours(setMinutes(setSeconds(setMilliseconds(currentWeekStart, 0), 0), 0), 0);
+          const weekEnd = setHours(setMinutes(setSeconds(setMilliseconds(
+            endOfWeek(currentWeekStart, { weekStartsOn: 1 }), 999), 59), 23), 23);
           
-          console.log('Fetching completed exercises between:', weekStart, 'and', weekEnd);
+          // Format dates for database query with proper time boundaries
+          const weekStartStr = format(weekStart, 'yyyy-MM-dd\'T\'HH:mm:ss.SSS');
+          const weekEndStr = format(weekEnd, 'yyyy-MM-dd\'T\'HH:mm:ss.SSS');
+          
+          console.log('Fetching completed exercises between:', weekStartStr, 'and', weekEndStr);
 
-          // Modified query to directly get exercise IDs
+          // Modified query to use consistent time boundaries
           const { data: completedData, error: completedError } = await supabase
             .from('workout_logs')
             .select(`
@@ -57,8 +62,8 @@ export function WeeklyExercises({ completedExercises: initialCompletedExercises 
               )
             `)
             .eq('user_id', user.id)
-            .gte('completed_at', `${weekStart}T00:00:00`)
-            .lte('completed_at', `${weekEnd}T23:59:59`);
+            .gte('completed_at', weekStartStr)
+            .lte('completed_at', weekEndStr);
 
           if (completedError) throw completedError;
 
