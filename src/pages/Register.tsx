@@ -13,7 +13,6 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,8 +26,8 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await signUp(email, password);
-      
+
+
       // Create profile after successful registration
       const { error: profileError } = await supabase
         .from('profiles')
@@ -41,7 +40,7 @@ export default function Register() {
         ]);
 
       if (profileError) throw profileError;
-      
+
       navigate('/login');
     } catch (error) {
       setError('Failed to create an account.');

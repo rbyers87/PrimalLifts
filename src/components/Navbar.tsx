@@ -15,7 +15,11 @@ import {
 } from 'lucide-react';
 
 export default function Navbar() {
-  const { user, signOut } = useAuth();
+  const user = { email: "local-user" };
+
+  const signOut = () => {
+    // do nothing or redirect
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);

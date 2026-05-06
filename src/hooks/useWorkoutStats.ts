@@ -9,7 +9,7 @@ interface WorkoutStats {
 }
 
 export function useWorkoutStats() {
-  const { user } = useAuth();
+  const user = { email: "local-user" };
   const [stats, setStats] = useState<WorkoutStats>({
     personalRecords: 0,
     totalWorkouts: 0,
@@ -43,7 +43,7 @@ export function useWorkoutStats() {
         if (streakData.data) {
           const today = new Date();
           let currentDate = today;
-          
+
           for (const log of streakData.data) {
             const logDate = new Date(log.completed_at);
             if (

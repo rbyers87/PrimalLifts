@@ -4,10 +4,10 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import type { WorkoutLog } from '../../types/workout';
 
-interface RecentWorkoutsProps {}
+interface RecentWorkoutsProps { }
 
-export function RecentWorkouts({}: RecentWorkoutsProps) {
-  const { user } = useAuth();
+export function RecentWorkouts({ }: RecentWorkoutsProps) {
+  const user = { email: "local-user" };
   const [recentWorkouts, setRecentWorkouts] = useState<WorkoutLog[]>([]);
   const [loading, setLoading] = useState(true);
 

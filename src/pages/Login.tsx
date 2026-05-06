@@ -9,7 +9,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +16,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await signIn(email, password);
+      // optionally just navigate to dashboard
+      navigate('/');
       navigate('/');
     } catch (error) {
       setError('Failed to sign in. Please check your credentials.');

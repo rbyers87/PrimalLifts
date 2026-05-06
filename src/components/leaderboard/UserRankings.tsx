@@ -17,7 +17,7 @@ export function UserRankings() {
   const [rankings, setRankings] = useState<UserRanking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const { user: authUser } = useAuth();
+  const authUser = { email: "local-user" };
 
   useEffect(() => {
     async function fetchRankings() {
@@ -103,9 +103,9 @@ export function UserRankings() {
 
     try {
       // Update UI immediately
-      setRankings(prev => prev.map(user => 
-        user.id === profileId 
-          ? { ...user, likes: user.likes + 1, hasLiked: true } 
+      setRankings(prev => prev.map(user =>
+        user.id === profileId
+          ? { ...user, likes: user.likes + 1, hasLiked: true }
           : user
       ));
 
@@ -117,9 +117,9 @@ export function UserRankings() {
       if (error) throw error;
     } catch (error) {
       // Rollback on error
-      setRankings(prev => prev.map(user => 
-        user.id === profileId 
-          ? { ...user, likes: user.likes - 1, hasLiked: false } 
+      setRankings(prev => prev.map(user =>
+        user.id === profileId
+          ? { ...user, likes: user.likes - 1, hasLiked: false }
           : user
       ));
       console.error('Like failed:', error);
@@ -192,7 +192,7 @@ const RankIcon = ({ index }: { index: number }) => {
   return <span className="w-6 text-center font-medium text-gray-500">{index + 1}</span>;
 };
 
-const LikeButton = ({ likes, hasLiked, isSelf, onClick }: { 
+const LikeButton = ({ likes, hasLiked, isSelf, onClick }: {
   likes: number;
   hasLiked: boolean;
   isSelf: boolean;

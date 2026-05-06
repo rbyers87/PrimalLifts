@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [isEditing, setIsEditing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [previousLogs, setPreviousLogs] = useState<any[]>([]);
-  const { user } = useAuth();
+  const user = { email: "local-user" };
 
   useEffect(() => {
     async function fetchWOD() {
@@ -166,11 +166,10 @@ export default function Dashboard() {
                 </button>
                 <button
                   onClick={isCompleted ? handleViewWorkout : handleStartWorkout}
-                  className={`px-4 py-2 rounded-md text-white dark:bg-gray-400 bg-gray-400 ${
-                    isCompleted
+                  className={`px-4 py-2 rounded-md text-white dark:bg-gray-400 bg-gray-400 ${isCompleted
                       ? 'dark:bg-gray-800 hover:bg-gray-600'
                       : 'bg-indigo-600 hover:bg-indigo-700'
-                  }`}
+                    }`}
                 >
                   {isCompleted ? 'View Workout' : 'Start Workout'}
                 </button>
