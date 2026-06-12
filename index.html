@@ -2,11 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/PrimalLifts/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Primal Lifts</title>
-    <link rel="manifest" href="/PrimalLifts/manifest.json">
-    <link rel="stylesheet" href="/PrimalLifts/src/index.css"> 
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- Fix: Point to the correct CSS location -->
+    <link rel="stylesheet" href="./src/index.css"> 
 
     <!-- OneSignal Notifications -->
     <script>
@@ -14,7 +16,7 @@
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "50c1b3ba-6ce1-4ba9-b003-cb9e006c2be6",
-          serviceWorkerPath: "/PrimalLifts/OneSignalSDKWorker.js",
+          serviceWorkerPath: "./OneSignalSDKWorker.js",
         });
 
         const isSubscribed = await OneSignal.isPushNotificationsEnabled();
@@ -30,14 +32,14 @@
     </script>
     
     <!-- Favicons -->
-    <link rel="icon" type="image/png" href="/PrimalLifts/icons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/PrimalLifts/icons/favicon.svg" />
-    <link rel="shortcut icon" href="/PrimalLifts/icons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/PrimalLifts/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="./icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
+    <link rel="shortcut icon" href="./icons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
    
     <!-- PWA Meta Tags -->
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/PrimalLifts/icons/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="./icons/ms-icon-144x144.png">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -47,16 +49,18 @@
   </head>
   <body class="bg-lightBackground text-lightText dark:bg-darkBackground dark:text-darkText">
     <div id="root"></div>
-    <script type="module" src="/PrimalLifts/src/main.tsx"></script>
+    
+    <!-- Fix: Point to the correct TypeScript entry point -->
+    <script type="module" src="./src/main.tsx"></script>
 
     <!-- Load UserScripts -->
-    <script type="module" src="/PrimalLifts/userscripts.js"></script>
+    <script type="module" src="./userscripts.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
       eruda.init();
     </script>
     
-    <script type="module" src="/PrimalLifts/main.js"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
