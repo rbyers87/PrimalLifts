@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import type { Profile } from '../types/profile';
 
 export function useProfile() {
-  const user = { email: "local-user" };
+  const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
