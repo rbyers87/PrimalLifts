@@ -18,7 +18,6 @@ export default function Login() {
 
     try {
       await signIn(email, password);
-
       navigate('/');
     } catch (error) {
       setError('Failed to sign in. Please check your credentials.');
