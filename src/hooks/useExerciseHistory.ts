@@ -11,7 +11,7 @@ interface ExerciseHistory {
 }
 
 export function useExerciseHistory(exerciseId: string) {
-  const user = { email: "local-user" };
+  const { user } = useAuth();
   const [history, setHistory] = useState<ExerciseHistory | null>(null);
   const [loading, setLoading] = useState(true);
 
