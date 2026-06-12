@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
-import Workouts from './pages/Workouts';
-import Leaderboard from './pages/Leaderboard';
-import Welcome from './pages/Welcome';
-import MessageBoard from './pages/MessageBoard';
+    import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+    import { AuthProvider } from './contexts/AuthContext';
+    import PrivateRoute from './components/PrivateRoute';
+    import Navbar from './components/Navbar';
+    import Login from './pages/Login';
+    import Register from './pages/Register';
+    import Dashboard from './pages/Dashboard';
+    import Profile from './pages/Profile';
+    import Settings from './pages/Settings';
+    import Workouts from './pages/Workouts';
+    import Leaderboard from './pages/Leaderboard';
+    import Welcome from './pages/Welcome';
+    import MessageBoard from './pages/MessageBoard';
 
     function App() {
       useEffect(() => {
