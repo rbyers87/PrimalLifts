@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import { useAuth } from "../../contexts/AuthContext";
-import { useExercises } from "../../hooks/useExercises";
-import type { Exercise } from "../../types/workout";
-import { v4 as uuidv4 } from 'uuid';
-import { format, parseISO } from 'date-fns';
+    import { supabase } from "../../lib/supabase";
+    import { useAuth } from "../../contexts/AuthContext";
+    import { useExercises } from "../../hooks/useExercises";
+    import type { Exercise } from "../../types/workout";
+    import { v4 as uuidv4 } from 'uuid';
+    import { format, parseISO } from 'date-fns';
 
     interface WorkoutFormProps {
       onClose: () => void;
@@ -184,43 +184,6 @@ import { format, parseISO } from 'date-fns';
             </div>
             <div>
               <label className="block text-sm font-medium dark:text-gray-300">Type</label>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <select
                 name="type"
                 value={formData.type}
@@ -230,9 +193,6 @@ import { format, parseISO } from 'date-fns';
                 <option value="weight training">Weight Training</option>
                 <option value="cardio">Cardio</option>
                 <option value="metcon">Metcon</option>
-
-
-
               </select>
             </div>
             <div className="flex items-center">

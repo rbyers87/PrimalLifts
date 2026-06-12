@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Dumbbell } from 'lucide-react';
-import { WorkoutLogger } from './WorkoutLogger';
-import { WorkoutEditor } from './WorkoutEditor';
-import { supabase } from '../../lib/supabase';
-import type { Workout, WorkoutExercise } from '../../types/workout';
-import { format, parseISO } from 'date-fns';
-import { useAuth } from '../../contexts/AuthContext';
+    import { Calendar, Clock, Dumbbell } from 'lucide-react';
+    import { WorkoutLogger } from './WorkoutLogger';
+    import { WorkoutEditor } from './WorkoutEditor';
+    import { supabase } from '../../lib/supabase';
+    import type { Workout, WorkoutExercise } from '../../types/workout';
+    import { format, parseISO } from 'date-fns';
+    import { useAuth } from '../../contexts/AuthContext';
     
     interface WorkoutCardProps {
       workout: Workout;
@@ -109,14 +109,6 @@ import { useAuth } from '../../contexts/AuthContext';
               {workout.description && (
                 <p className="dark:text-gray-300 dark:text-gray-400 mt-1">{workout.description}</p>
               )}
-
-
-
-
-
-
-
-
             </div>
             <div className="flex items-center space-x-4 text-gray-500 dark:text-gray-400">
               {workout.scheduled_date && (
@@ -127,21 +119,9 @@ import { useAuth } from '../../contexts/AuthContext';
                   </span>
                 </div>
               )}
-
-
-
-
-
-
-
-
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-1 dark:text-gray-400" />
                 <span className="text-sm dark:text-gray-300">~45 min</span>
-
-
-
-
               </div>
             </div>
           </div>
