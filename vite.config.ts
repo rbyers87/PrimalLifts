@@ -8,61 +8,68 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/**/*', 'manifest.json'],
+      injectRegister: 'auto',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
+        navigateFallback: '/index.html', // Add this for SPA routing
+        navigateFallbackAllowlist: [/^(?!\/__).*/], // Allow all routes except those starting with __
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: {
+                maxEntries: 4,
+                maxAgeSeconds: 365 * 24 * 60 * 60
+              }
+            }
+          }
+        ]
+      },
       manifest: {
         name: 'Primal Lifts',
-        short_name: 'PrimalLifts',
-        description: 'Track your workouts and fitness progress',
+        short_name: 'PLs',
+        description: 'Your workout tracking application',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/PrimalLifts/',
-        scope: '/PrimalLifts/',
+        start_url: '/', // Make sure this is correct
         icons: [
           {
-            src: '/PrimalLifts/icons/android-icon-36x36.png',
-            sizes: '36x36',
-            type: 'image/png'
-          },
-          {
-            src: '/PrimalLifts/icons/android-icon-48x48.png',
-            sizes: '48x48',
-            type: 'image/png'
-          },
-          {
-            src: '/PrimalLifts/icons/android-icon-72x72.png',
-            sizes: '72x72',
-            type: 'image/png'
-          },
-          {
-            src: '/PrimalLifts/icons/android-icon-96x96.png',
-            sizes: '96x96',
-            type: 'image/png'
-          },
-          {
-            src: '/PrimalLifts/icons/android-icon-144x144.png',
-            sizes: '144x144',
-            type: 'image/png'
-          },
-          {
-            src: '/PrimalLifts/icons/android-icon-192x192.png',
+            src: '/icons/icon-192x192.png',
             sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: '/icons/icon-512x512.png',
+            sizes: '512x512',
             type: 'image/png'
           }
         ]
+      },
+      devOptions: {
+        enabled: true
       }
     })
   ],
+    
   resolve: {
     alias: {
       '@lib': path.resolve(__dirname, 'src/lib'),
       '@components': path.resolve(__dirname, 'src/components'),
     },
+    conditions: ['import', 'module', 'browser', 'default']
   },
-  base: '/PrimalLifts/',
+  base: "/PrimalLifts/",
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
   build: {
-    outDir: 'dist',
-    sourcemap: true,
+    sourcemap: process.env.NODE_ENV !== 'production',
     rollupOptions: {
       output: {
         manualChunks: {
