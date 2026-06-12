@@ -7,5 +7,3 @@ import { createClient } from '@supabase/supabase-js';
     
     console.log(import.meta.env.VITE_SUPABASE_URL);  // Log to verify the URL
     console.log(import.meta.env.VITE_SUPABASE_ANON_KEY);  // Log to verify the anon key
-
-
