@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
-import type { ExerciseScore } from '../../types/workout';
+    import { supabase } from '../../lib/supabase';
+    import { useAuth } from '../../contexts/AuthContext';
+    import type { ExerciseScore } from '../../types/workout';
 
     export function PersonalRecords() {
       const { user } = useAuth();

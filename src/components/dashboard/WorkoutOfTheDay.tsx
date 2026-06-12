@@ -32,12 +32,12 @@ import React, { useState, useEffect } from 'react';
             const { data, error } = await supabase
               .from('workouts')
               .select(`
-               *,
-               workout_exercises (
-                 *,
-                 exercise:exercises (*)
-               )
-             `)
+                *,
+                workout_exercises (
+                  *,
+                  exercise:exercises (*)
+                )
+              `)
               .eq('is_wod', true)
               .eq('scheduled_date', formattedDate)
               .limit(1);
@@ -133,7 +133,7 @@ import React, { useState, useEffect } from 'react';
                         <p className="font-medium dark:text-gray-100">{exercise.exercise.name}</p>
                       </div>
                     </div>
-</div>
+                  </div>
                 ))}
               </div>
               <div className="mt-6 flex justify-end space-x-4">
@@ -153,7 +153,7 @@ import React, { useState, useEffect } from 'react';
                 >
                   {isCompleted ? 'View Workout' : 'Start Workout'}
                 </button>
-</div>
+              </div>
             </>
           ) : (
             <p>No workout scheduled for today.</p>
