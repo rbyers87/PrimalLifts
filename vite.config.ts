@@ -14,8 +14,8 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
-        navigateFallback: '/index.html', // Add this for SPA routing
-        navigateFallbackAllowlist: [/^(?!\/__).*/], // Allow all routes except those starting with __
+        navigateFallback: 'index.html', // Remove leading slash
+        navigateFallbackAllowlist: [/^(?!\/__).*/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
@@ -37,15 +37,16 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/', // Make sure this is correct
+        start_url: '/PrimalLifts/', // Include the base path
+        scope: '/PrimalLifts/', // Add scope to restrict to the app path
         icons: [
           {
-            src: '/icons/icon-192x192.png',
+            src: '/PrimalLifts/icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/icons/icon-512x512.png',
+            src: '/PrimalLifts/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }
@@ -64,7 +65,7 @@ export default defineConfig({
     },
     conditions: ['import', 'module', 'browser', 'default']
   },
-  base: "/PrimalLifts/",
+  base: '/PrimalLifts/', // This is correct - keep as is
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
