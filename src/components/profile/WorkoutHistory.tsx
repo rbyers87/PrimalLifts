@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
-import { LoadingSpinner } from '../common/LoadingSpinner';
-import type { WorkoutLog } from '../../types/workout';
+    import { format } from 'date-fns';
+    import { supabase } from '../../lib/supabase';
+    import { useAuth } from '../../contexts/AuthContext';
+    import { LoadingSpinner } from '../common/LoadingSpinner';
+    import type { WorkoutLog } from '../../types/workout';
 
     interface WorkoutHistoryProps {
       exerciseId?: string | null;
@@ -46,15 +46,10 @@ import type { WorkoutLog } from '../../types/workout';
           }
         }
 
-
-
-
         fetchWorkoutHistory();
       }, [user, exerciseId]);
 
       if (loading) return <LoadingSpinner />;
-
-
 
       return (
         <div className="bg-white dark:bg-darkBackground dark:text-gray-100 dark:text-gray-200 rounded-lg shadow-md p-6 transition-all duration-300">
