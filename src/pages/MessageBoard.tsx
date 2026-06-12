@@ -14,7 +14,7 @@ interface Message {
 }
 
 export default function MessageBoard() {
-  const user = { email: "local-user" };
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,7 @@ export default function MessageBoard() {
 
       // Trigger OneSignal push notification
       window.OneSignalDeferred = window.OneSignalDeferred || [];
-      window.OneSignalDeferred.push(async function (OneSignal) {
+      window.OneSignalDeferred.push(async function(OneSignal) {
         const tags = await OneSignal.getTags();
         if (tags.message_board_notifications === 'true') {
           OneSignal.sendTag('message_board_notifications', 'true');
