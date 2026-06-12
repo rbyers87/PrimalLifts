@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-    import { Calendar, Clock, Dumbbell } from 'lucide-react';
-    import { WorkoutLogger } from './WorkoutLogger';
-    import { WorkoutEditor } from './WorkoutEditor';
-    import { supabase } from '../../lib/supabase';
-    import type { Workout, WorkoutExercise } from '../../types/workout';
-    import { format, parseISO } from 'date-fns';
-    import { useAuth } from '../../contexts/AuthContext';
+import { Calendar, Clock, Dumbbell } from 'lucide-react';
+import { WorkoutLogger } from './WorkoutLogger';
+import { WorkoutEditor } from './WorkoutEditor';
+import { supabase } from '../../lib/supabase';
+import type { Workout, WorkoutExercise } from '../../types/workout';
+import { format, parseISO } from 'date-fns';
+import { useAuth } from '../../contexts/AuthContext';
     
     interface WorkoutCardProps {
       workout: Workout;
