@@ -18,7 +18,7 @@ interface ExerciseLog {
 }
 
 export function useWorkoutLogger() {
-  const user = { email: "local-user" };
+  const { user } = useAuth();
   const [logging, setLogging] = useState(false);
 
   const startWorkoutLogging = async (workout: Workout) => {
@@ -47,7 +47,7 @@ export function useWorkoutLogger() {
     return logs.reduce((total, log, index) => {
       const exercise = workout.workout_exercises?.[index];
       if (!exercise) return total;
-
+      
       if (exercise.exercise.name === 'Run') {
         // Score for Run is based on total distance
         return total + log.sets.reduce((setTotal, set) => setTotal + (set.distance || 0), 0);
