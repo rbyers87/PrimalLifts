@@ -20,7 +20,7 @@ interface WeeklyExercisesProps {
 }
 
 export function WeeklyExercises({ completedExercises: initialCompletedExercises }: WeeklyExercisesProps) {
-  const user = { email: "local-user" };
+  const { user } = useAuth();
   const [exercises, setExercises] = useState<WeeklyExercise[]>([]);
   const [completedExercises, setCompletedExercises] = useState<CompletedExercise[]>(initialCompletedExercises || []);
   const [loading, setLoading] = useState(true);
@@ -43,11 +43,11 @@ export function WeeklyExercises({ completedExercises: initialCompletedExercises 
           const weekStart = setHours(setMinutes(setSeconds(setMilliseconds(currentWeekStart, 0), 0), 0), 0);
           const weekEnd = setHours(setMinutes(setSeconds(setMilliseconds(
             endOfWeek(currentWeekStart, { weekStartsOn: 1 }), 999), 59), 23), 23);
-
+          
           // Format dates for database query with proper time boundaries
           const weekStartStr = format(weekStart, 'yyyy-MM-dd\'T\'HH:mm:ss.SSS');
           const weekEndStr = format(weekEnd, 'yyyy-MM-dd\'T\'HH:mm:ss.SSS');
-
+          
           console.log('Fetching completed exercises between:', weekStartStr, 'and', weekEndStr);
 
           // Modified query to use consistent time boundaries
@@ -108,23 +108,23 @@ export function WeeklyExercises({ completedExercises: initialCompletedExercises 
     const weekStart = setHours(setMinutes(setSeconds(setMilliseconds(currentWeekStart, 0), 0), 0), 0);
     const weekEnd = setHours(setMinutes(setSeconds(setMilliseconds(
       endOfWeek(currentWeekStart, { weekStartsOn: 1 }), 999), 59), 23), 23);
-
+    
     // Debug log for week boundaries
     console.log('Checking exercise', exerciseId, 'within interval:', format(weekStart, 'yyyy-MM-dd HH:mm:ss'), 'to', format(weekEnd, 'yyyy-MM-dd HH:mm:ss'));
-
+    
     return completedExercises.some(completed => {
       const completedDate = parseISO(completed.completed_at);
-
+      
       // Debug log for each comparison
       console.log(
-        'Exercise:', exerciseId,
-        'Completed:', completed.exercise_id,
+        'Exercise:', exerciseId, 
+        'Completed:', completed.exercise_id, 
         'Date:', format(completedDate, 'yyyy-MM-dd HH:mm:ss'),
         'In range?', isWithinInterval(completedDate, { start: weekStart, end: weekEnd })
       );
-
-      return completed.exercise_id === exerciseId &&
-        isWithinInterval(completedDate, { start: weekStart, end: weekEnd });
+      
+      return completed.exercise_id === exerciseId && 
+             isWithinInterval(completedDate, { start: weekStart, end: weekEnd });
     });
   };
 
