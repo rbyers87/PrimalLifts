@@ -23,13 +23,13 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [completedExercises, setCompletedExercises] = useState<CompletedExercise[]>([]);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0); // Track re-fetching
   const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
   const [isLogging, setIsLogging] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [previousLogs, setPreviousLogs] = useState<any[]>([]);
-  const user = { email: "local-user" };
+  const { user } = useAuth();
 
   useEffect(() => {
     async function fetchWOD() {
@@ -39,12 +39,12 @@ export default function Dashboard() {
         const { data, error } = await supabase
           .from('workouts')
           .select(`
-                *,
-                workout_exercises (
-                  *,
-                  exercise:exercises (*)
-                )
-              `)
+            *,
+            workout_exercises (
+              *,
+              exercise:exercises (*)
+            )
+          `)
           .eq('is_wod', true)
           .eq('scheduled_date', formattedDate)
           .limit(1);
@@ -61,7 +61,7 @@ export default function Dashboard() {
     }
 
     fetchWOD();
-  }, [selectedDate, refreshKey]);
+  }, [selectedDate, refreshKey]); // Trigger refetch when refreshKey changes
 
   const checkCompletion = async (workout: Workout | null) => {
     if (!workout?.id || !user) return;
@@ -93,7 +93,7 @@ export default function Dashboard() {
 
   const handleWorkoutComplete = (completed: CompletedExercise[]) => {
     setCompletedExercises(completed);
-    setRefreshKey(prevKey => prevKey + 1);
+    setRefreshKey(prevKey => prevKey + 1); // Trigger re-fetch by updating refreshKey
   };
 
   const handleStartWorkout = () => {
@@ -102,11 +102,17 @@ export default function Dashboard() {
 
   const handleViewWorkout = () => {
     setIsLogging(true);
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey(prev => prev + 1); // Trigger re-fetch by updating refreshKey
   };
 
   const handleClose = () => {
     setIsEditing(false);
+  };
+
+  const handleWorkoutLoggerClose = () => {
+    setIsLogging(false);
+    // Force refresh of weekly exercises when workout logger closes
+    setRefreshKey(prev => prev + 1);
   };
 
   const formatDate = (dateString: string | null) => {
@@ -160,10 +166,11 @@ export default function Dashboard() {
                 </button>
                 <button
                   onClick={isCompleted ? handleViewWorkout : handleStartWorkout}
-                  className={`px-4 py-2 rounded-md text-white dark:bg-gray-400 bg-gray-400 ${isCompleted
+                  className={`px-4 py-2 rounded-md text-white dark:bg-gray-400 bg-gray-400 ${
+                    isCompleted
                       ? 'dark:bg-gray-800 hover:bg-gray-600'
                       : 'bg-indigo-600 hover:bg-indigo-700'
-                    }`}
+                  }`}
                 >
                   {isCompleted ? 'View Workout' : 'Start Workout'}
                 </button>
@@ -175,16 +182,18 @@ export default function Dashboard() {
               <p>No workout scheduled for today.</p>
             </div>
           )}
-          <RecentWorkouts onWorkoutComplete={handleWorkoutComplete} />
+          {/* Pass the handler to RecentWorkouts */}
+          <RecentWorkouts key={refreshKey} onWorkoutComplete={handleWorkoutComplete} />
         </div>
         <div className="space-y-4">
-          <WeeklyExercises completedExercises={completedExercises} />
+          {/* Add key prop to force re-mount when refreshKey changes */}
+          <WeeklyExercises key={refreshKey} completedExercises={completedExercises} />
         </div>
       </div>
       {isLogging && (
         <WorkoutLogger
           workout={wodWorkout}
-          onClose={() => setIsLogging(false)}
+          onClose={handleWorkoutLoggerClose}
           previousLogs={previousLogs}
         />
       )}
