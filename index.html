@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Primal Lifts</title>
 
-    <!-- Manifest (relative path) -->
+    <!-- Manifest -->
     <link rel="manifest" href="./manifest.json" />
 
     <!-- OneSignal -->
@@ -27,7 +27,7 @@
       });
     </script>
 
-    <!-- Favicons (relative paths) -->
+    <!-- Favicons -->
     <link rel="icon" type="image/png" href="./icons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
     <link rel="shortcut icon" href="./icons/favicon.ico" />
@@ -44,10 +44,6 @@
   </head>
   <body class="bg-lightBackground text-lightText dark:bg-darkBackground dark:text-darkText">
     <div id="root"></div>
-
-    <!-- Vite entry point – Vite will rewrite this to the hashed bundle -->
     <script type="module" src="/src/main.tsx"></script>
-
-    <!-- Removed: userscripts.js, eruda, main.js – they were causing 404s -->
   </body>
 </html>
