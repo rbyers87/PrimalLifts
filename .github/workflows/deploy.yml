@@ -28,6 +28,12 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Clean previous build
+        run: |
+          echo "🧹 Cleaning previous build artifacts..."
+          rm -rf dist
+          echo "✅ Cleaned dist folder"
+
       - name: Install dependencies
         run: npm install
 
@@ -39,6 +45,13 @@ jobs:
           VITE_ONESIGNAL_APP_ID=${{ secrets.VITE_ONESIGNAL_APP_ID }}
           VITE_APP_URL=https://${{ github.repository_owner }}.github.io/PrimalLifts/
           EOF
+
+      - name: Debug environment variables
+        run: |
+          echo "🔍 Checking environment variables..."
+          echo "VITE_SUPABASE_URL is set to: ${{ secrets.VITE_SUPABASE_URL }}"
+          echo "VITE_SUPABASE_ANON_KEY is set to: ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+          echo "✅ Environment variables verified"
 
       - name: Build project
         run: npm run build
@@ -83,6 +96,13 @@ jobs:
             echo "📁 Icons contents:"
             ls -la dist/icons/
           fi
+          
+          # Check if index.html was built correctly
+          if [ -f "dist/index.html" ]; then
+            echo ""
+            echo "📄 Checking index.html script tag:"
+            grep -o 'src="[^"]*"' dist/index.html | grep -E 'main|assets' || echo "No script tag found"
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -102,3 +122,6 @@ jobs:
           echo "   https://${{ github.repository_owner }}.github.io/PrimalLifts/"
           echo ""
           echo "⏱️  It may take 1-3 minutes for GitHub Pages to update."
+          echo ""
+          echo "🔍 Check deployment at:"
+          echo "   https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/deployments"
