@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -15,9 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,12 +26,6 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-
-      - name: Clean previous build
-        run: |
-          echo "🧹 Cleaning previous build artifacts..."
-          rm -rf dist
-          echo "✅ Cleaned dist folder"
 
       - name: Install dependencies
         run: npm install
@@ -44,14 +37,11 @@ jobs:
           VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ONESIGNAL_APP_ID=${{ secrets.VITE_ONESIGNAL_APP_ID }}
           VITE_APP_URL=https://${{ github.repository_owner }}.github.io/PrimalLifts/
+          VITE_CLOUDINARY_CLOUD_NAME=${{ secrets.VITE_CLOUDINARY_CLOUD_NAME }}
+          VITE_CLOUDINARY_UPLOAD_PRESET=${{ secrets.VITE_CLOUDINARY_UPLOAD_PRESET }}
+          VITE_CLOUDINARY_API_KEY=${{ secrets.VITE_CLOUDINARY_API_KEY }}
+          VITE_CLOUDINARY_API_SECRET=${{ secrets.VITE_CLOUDINARY_API_SECRET }}
           EOF
-
-      - name: Debug environment variables
-        run: |
-          echo "🔍 Checking environment variables..."
-          echo "VITE_SUPABASE_URL is set to: ${{ secrets.VITE_SUPABASE_URL }}"
-          echo "VITE_SUPABASE_ANON_KEY is set to: ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
-          echo "✅ Environment variables verified"
 
       - name: Build project
         run: npm run build
@@ -59,69 +49,29 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ONESIGNAL_APP_ID: ${{ secrets.VITE_ONESIGNAL_APP_ID }}
+          VITE_CLOUDINARY_CLOUD_NAME: ${{ secrets.VITE_CLOUDINARY_CLOUD_NAME }}
+          VITE_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.VITE_CLOUDINARY_UPLOAD_PRESET }}
+          VITE_CLOUDINARY_API_KEY: ${{ secrets.VITE_CLOUDINARY_API_KEY }}
+          VITE_CLOUDINARY_API_SECRET: ${{ secrets.VITE_CLOUDINARY_API_SECRET }}
 
       - name: Copy root static assets to dist
         run: |
-          echo "📁 Copying root static assets to dist..."
-          
-          # Copy manifest files
-          if [ -f "manifest.json" ]; then
-            cp manifest.json dist/
-            echo "✅ Copied manifest.json"
-          fi
-          
-          if [ -f "site.webmanifest" ]; then
-            cp site.webmanifest dist/
-            echo "✅ Copied site.webmanifest"
-          fi
-          
-          # Copy service worker
-          if [ -f "service-worker.js" ]; then
-            cp service-worker.js dist/
-            echo "✅ Copied service-worker.js"
-          fi
-          
-          # Copy icons folder
-          if [ -d "icons" ]; then
-            cp -r icons dist/
-            echo "✅ Copied icons folder"
-          fi
-          
-          # Show what's in dist for debugging
-          echo ""
-          echo "📁 Dist contents:"
-          ls -la dist/
-          if [ -d "dist/icons" ]; then
-            echo ""
-            echo "📁 Icons contents:"
-            ls -la dist/icons/
-          fi
-          
-          # Check if index.html was built correctly
-          if [ -f "dist/index.html" ]; then
-            echo ""
-            echo "📄 Checking index.html script tag:"
-            grep -o 'src="[^"]*"' dist/index.html | grep -E 'main|assets' || echo "No script tag found"
-          fi
+          if [ -f "manifest.json" ]; then cp manifest.json dist/; fi
+          if [ -d "icons" ]; then cp -r icons dist/; fi
+          if [ -f "service-worker.js" ]; then cp service-worker.js dist/; fi
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy PrimalLifts - ${{ github.event.head_commit.message }}'
+          path: ./dist
 
-      - name: Deployment complete
-        run: |
-          echo "✅ Deployment completed!"
-          echo ""
-          echo "🌐 Your site will be available at:"
-          echo "   https://${{ github.repository_owner }}.github.io/PrimalLifts/"
-          echo ""
-          echo "⏱️  It may take 1-3 minutes for GitHub Pages to update."
-          echo ""
-          echo "🔍 Check deployment at:"
-          echo "   https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/deployments"
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
