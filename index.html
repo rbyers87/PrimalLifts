@@ -8,24 +8,6 @@
     <!-- Manifest -->
     <link rel="manifest" href="./manifest.json" />
 
-    <!-- OneSignal -->
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "50c1b3ba-6ce1-4ba9-b003-cb9e006c2be6",
-          serviceWorkerPath: "OneSignalSDKWorker.js",
-        });
-        const isSubscribed = await OneSignal.isPushNotificationsEnabled();
-        console.log("Is user subscribed?", isSubscribed);
-        if (isSubscribed) {
-          const tags = await OneSignal.getTags();
-          console.log("User tags:", tags);
-        } else {
-          console.log("User is not subscribed to push notifications.");
-        }
-      });
-    </script>
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="./icons/favicon-96x96.png" sizes="96x96" />
