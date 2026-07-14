@@ -141,3 +141,6 @@ for latest changes before running npm run deploy
 ✅ You’re using HTTPS
 
 
+**Deploy.yml file is key when using supabase url and anon keys.  Also when deploying to github pages, make sure to use gh-pages branch to deploy to from settings page.
+
+
