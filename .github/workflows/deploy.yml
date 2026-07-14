@@ -29,7 +29,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install  # Changed from npm ci to npm install
+        run: npm install
 
       - name: Create .env file
         run: |
@@ -47,27 +47,8 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ONESIGNAL_APP_ID: ${{ secrets.VITE_ONESIGNAL_APP_ID }}
 
-      - name: Copy static assets to dist
+      - name: Show dist contents
         run: |
-          # Copy icons folder if it exists
-          if [ -d "icons" ]; then
-            cp -r icons dist/
-            echo "✅ Copied icons folder"
-          fi
-          
-          # Copy manifest.json if it exists
-          if [ -f "manifest.json" ]; then
-            cp manifest.json dist/
-            echo "✅ Copied manifest.json"
-          fi
-          
-          # Copy any other root static files
-          if [ -f "OneSignalSDKWorker.js" ]; then
-            cp OneSignalSDKWorker.js dist/
-            echo "✅ Copied OneSignalSDKWorker.js"
-          fi
-          
-          # Show what's in dist for debugging
           echo "📁 Dist contents:"
           ls -la dist/
           if [ -d "dist/icons" ]; then
@@ -93,6 +74,3 @@ jobs:
           echo "   https://${{ github.repository_owner }}.github.io/PrimalLifts/"
           echo ""
           echo "⏱️  It may take 1-3 minutes for GitHub Pages to update."
-          echo ""
-          echo "🔍 Check deployment at:"
-          echo "   https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/deployments"
