@@ -47,11 +47,39 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ONESIGNAL_APP_ID: ${{ secrets.VITE_ONESIGNAL_APP_ID }}
 
-      - name: Show dist contents
+      - name: Copy root static assets to dist
         run: |
+          echo "📁 Copying root static assets to dist..."
+          
+          # Copy manifest files
+          if [ -f "manifest.json" ]; then
+            cp manifest.json dist/
+            echo "✅ Copied manifest.json"
+          fi
+          
+          if [ -f "site.webmanifest" ]; then
+            cp site.webmanifest dist/
+            echo "✅ Copied site.webmanifest"
+          fi
+          
+          # Copy service worker
+          if [ -f "service-worker.js" ]; then
+            cp service-worker.js dist/
+            echo "✅ Copied service-worker.js"
+          fi
+          
+          # Copy icons folder
+          if [ -d "icons" ]; then
+            cp -r icons dist/
+            echo "✅ Copied icons folder"
+          fi
+          
+          # Show what's in dist for debugging
+          echo ""
           echo "📁 Dist contents:"
           ls -la dist/
           if [ -d "dist/icons" ]; then
+            echo ""
             echo "📁 Icons contents:"
             ls -la dist/icons/
           fi
