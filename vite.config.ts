@@ -8,8 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/*.png', 'manifest.json'],
-      manifest: false, // We'll handle manifest manually
+      manifest: false, // Disable automatic manifest generation
+      includeAssets: ['favicon.ico', 'icons/*.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
       },
