@@ -1,20 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      manifest: false, // Disable automatic manifest generation
-      includeAssets: ['favicon.ico', 'icons/*.png'],
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
-      },
-    }),
-  ],
+  plugins: [react()],
   base: '/PrimalLifts/',
   resolve: {
     alias: {
@@ -28,6 +17,8 @@ export default defineConfig({
       },
     },
   },
+  // Copy root-level static assets to dist
+  publicDir: false, // Disable default public dir
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
