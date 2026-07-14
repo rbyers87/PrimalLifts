@@ -4,7 +4,7 @@ import path from 'path';  // already imported
 
 export default defineConfig({
   plugins: [react()],
-  base: "/PrimalLifts",
+  base: "/PrimalLifts/",
   resolve: {
     alias: {
       '@lib': path.resolve(__dirname, 'src/lib'),  // <-- add this
