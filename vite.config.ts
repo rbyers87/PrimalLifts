@@ -1,13 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';  // already imported
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
   base: "/PrimalLifts/",
   resolve: {
     alias: {
-      '@lib': path.resolve(__dirname, 'src/lib'),  // <-- add this
+      '@lib': path.resolve(__dirname, 'src/lib'),
+      // add other aliases if needed, e.g.:
+      // '@components': path.resolve(__dirname, 'src/components'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
     },
   },
   optimizeDeps: {
